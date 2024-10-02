@@ -9,5 +9,5 @@ public enum PacketTypeEnum : int
     GodModeToggle = 0x04,
     AttackLastAttack = 0x05,
     RequestObjUse = 0x06,
-
+    LoginSeed = 0xEF,
 }

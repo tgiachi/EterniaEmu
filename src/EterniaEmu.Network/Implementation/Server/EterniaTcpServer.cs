@@ -4,7 +4,7 @@ using Serilog;
 
 namespace EterniaEmu.Network.Implementation.Server;
 
-public class EterniaTcpServer :TcpServer
+public class EterniaTcpServer : TcpServer
 {
     private readonly ILogger _logger = Log.ForContext<EterniaTcpServer>();
 
@@ -12,4 +12,6 @@ public class EterniaTcpServer :TcpServer
     {
 
     }
+
+    protected override TcpSession CreateSession() => new EterniaTcpSession(this);
 }

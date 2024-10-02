@@ -15,4 +15,13 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\EterniaEmu.Core\EterniaEmu.Core.csproj" />
+      <ProjectReference Include="..\EterniaEmu.Network\EterniaEmu.Network.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    </ItemGroup>
+
 </Project>

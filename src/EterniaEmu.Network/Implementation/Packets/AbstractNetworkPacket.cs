@@ -5,7 +5,7 @@ namespace EterniaEmu.Network.Implementation.Packets;
 
 public class AbstractNetworkPacket : INetworkPacket
 {
-    public int Size { get; } = 0;
+    public virtual int Size { get; } = 0;
 
     private int _position = 0;
 
