@@ -2,7 +2,7 @@ using EterniaEmu.Network.Interfaces.Packets;
 
 namespace EterniaEmu.Network.Interfaces.Listeners;
 
-public interface INetworkPacketListener<in TPacket> where TPacket : INetworkPacket
+public interface INetworkPacketListener
 {
-    Task OnPacketReceivedAsync(string sessionId, TPacket packet);
+    Task<List<INetworkPacket>> OnPacketReceivedAsync(string sessionId, INetworkPacket packet);
 }

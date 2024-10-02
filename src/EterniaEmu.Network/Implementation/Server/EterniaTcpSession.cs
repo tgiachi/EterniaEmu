@@ -1,4 +1,5 @@
 using EterniaEmu.Network.Interfaces.Packets;
+using EterniaEmu.Network.Interfaces.Server;
 using NetCoreServer;
 using Serilog;
 
@@ -8,10 +9,15 @@ namespace EterniaEmu.Network.Implementation.Server;
 public class EterniaTcpSession : TcpSession
 {
     private readonly ILogger _logger = Log.ForContext<EterniaTcpSession>();
+
+    private readonly IEterniaEmuTcpServer _eterniaEmuTcpServer;
+
     protected EterniaTcpServer EterniaTcpServer => (EterniaTcpServer)Server;
 
-    public EterniaTcpSession(EterniaTcpServer server) : base(server)
+
+    public EterniaTcpSession(EterniaTcpServer server, IEterniaEmuTcpServer eterniaEmuTcpServer) : base(server)
     {
+        _eterniaEmuTcpServer = eterniaEmuTcpServer;
     }
 
     public void SendPackets(params INetworkPacket[] packets)
@@ -58,6 +64,8 @@ public class EterniaTcpSession : TcpSession
         _logger.Debug("[{Id}] Found packet type: {PacketType}", Id, packet.GetType().Name);
 
         packet.Read(buffer.Skip(1).Take(packet.Size).ToArray());
+
+        _eterniaEmuTcpServer.DispatchPacketAsync(Id, packet);
 
 
         base.OnReceived(buffer, offset, size);

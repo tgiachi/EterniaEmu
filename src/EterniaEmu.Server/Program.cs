@@ -7,6 +7,8 @@ using EterniaEmu.Network.Attributes;
 using EterniaEmu.Network.Extensions;
 using EterniaEmu.Network.Implementation.Server;
 using EterniaEmu.Network.Interfaces.Server;
+using EterniaEmu.Network.Packets;
+using EterniaEmu.Server.Handlers;
 using EterniaEmu.Server.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -65,5 +67,8 @@ var app = builder.Build();
 await using var scope = app.Services.CreateAsyncScope();
 
 var server = scope.ServiceProvider.GetRequiredService<IEterniaEmuTcpServer>();
+
+server.AddPacketListener<LoginSeedPacket>(new LoginListener());
+
 server.Start();
 await app.RunAsync();
