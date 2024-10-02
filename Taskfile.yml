@@ -20,4 +20,4 @@ tasks:
       - dotnet build
   publish:
     cmds:
-      - dotnet publish src/EterniaEmu.Server/EterniaEmu.Server.csproj  -c Release -o ./publish
+      - dotnet publish src/EterniaEmu.Server/EterniaEmu.Server.csproj p:PublishSingleFile=true --self-contained true  -c Release -o ./publish

@@ -1,23 +1,32 @@
 ﻿using CommandLine;
 using ConfigurationSubstitution;
-using EterniaEmu.Core.Config.Sections;
+using EterniaEmu.Core.Config;
 using EterniaEmu.Core.Extensions;
+using EterniaEmu.Core.Utils;
+using EterniaEmu.Network.Attributes;
+using EterniaEmu.Network.Extensions;
+using EterniaEmu.Network.Implementation.Server;
+using EterniaEmu.Network.Interfaces.Server;
 using EterniaEmu.Server.Options;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+
+
+
+
+
+EterniaServerOptions options = null;
+
+Parser.Default.ParseArguments<EterniaServerOptions>(args).WithParsed(o => options = o);
 
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
     .WriteTo.Console()
     .CreateLogger();
-
-
-EterniaServerOptions options = null;
-
-Parser.Default.ParseArguments<EterniaServerOptions>(args).WithParsed(o => options = o);
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -35,7 +44,24 @@ builder.Configuration
     .EnableSubstitutions();
 
 
+Log.Logger.Debug("Scanning for network packets");
+
+AssemblyUtils.GetAttribute<NetworkPacketAttribute>().ForEach(
+    n =>
+    {
+        Log.Logger.Debug("Registering network packet {Packet}", n.Name);
+        builder.Services.RegisterNetworkPacket(n);
+    });
+
+
+builder.Services.AddSingleton<IEterniaEmuTcpServer, EterniaEmuTcpServer>();
+
+
 var app = builder.Build();
 
+
+await using var scope = app.Services.CreateAsyncScope();
+
+scope.ServiceProvider.GetRequiredService<IEterniaEmuTcpServer>();
 
 await app.RunAsync();

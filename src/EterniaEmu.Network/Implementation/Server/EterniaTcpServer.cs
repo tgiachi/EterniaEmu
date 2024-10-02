@@ -12,10 +12,6 @@ public class EterniaTcpServer : TcpServer
 
     private readonly Dictionary<byte, Type> _packetTypes = new();
 
-
-
-
-
     public EterniaTcpServer(IPAddress address, int port) : base(address, port)
     {
     }
