@@ -43,25 +43,34 @@ public class EterniaTcpSession : TcpSession
 
         packet.Write().CopyTo(buffer, 1);
 
-        SendAsync(buffer);
+
+        var result = SendAsync(buffer);
+
+        _logger.Debug(
+            "[{Id}] >> Sent ({Result}) opCode: 0x{OpCode} total bytes: {Total}",
+            Id,
+            result,
+            packet.OpCode.ToString("X2"),
+            buffer.Length
+        );
     }
 
     protected override void OnReceived(byte[] buffer, long offset, long size)
     {
         var opCode = buffer[0];
 
-        _logger.Debug("[{Id}] Received opCode: 0x{OpCode}", Id, opCode.ToString("X2"));
+        _logger.Debug("[{Id}] << Received opCode: 0x{OpCode}", Id, opCode.ToString("X2"));
 
         var packet = EterniaTcpServer.CreatePacket(opCode);
 
         if (packet == null)
         {
-            _logger.Warning("[{Id}] Unknown packet type: {OpCode}", Id, opCode);
+            _logger.Warning("[{Id}] !<< Unknown packet type: {OpCode}", Id, opCode);
             return;
         }
 
 
-        _logger.Debug("[{Id}] Found packet type: {PacketType}", Id, packet.GetType().Name);
+        _logger.Debug("[{Id}] // Found packet type: {PacketType}", Id, packet.GetType().Name);
 
         packet.Read(buffer.Skip(1).Take(packet.Size).ToArray());
 
