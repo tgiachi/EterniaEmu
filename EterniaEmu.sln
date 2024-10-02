@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EterniaEmu.Network", "src\E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EterniaEmu.Tests", "tests\EterniaEmu.Tests\EterniaEmu.Tests.csproj", "{456C9D96-B3EE-4E4A-A235-8E4B851C0EE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EterniaEmu.Server", "src\EterniaEmu.Server\EterniaEmu.Server.csproj", "{EFCCF63D-F347-42D1-85F5-DDEC7D30A72E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{456C9D96-B3EE-4E4A-A235-8E4B851C0EE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{456C9D96-B3EE-4E4A-A235-8E4B851C0EE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{456C9D96-B3EE-4E4A-A235-8E4B851C0EE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFCCF63D-F347-42D1-85F5-DDEC7D30A72E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFCCF63D-F347-42D1-85F5-DDEC7D30A72E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFCCF63D-F347-42D1-85F5-DDEC7D30A72E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFCCF63D-F347-42D1-85F5-DDEC7D30A72E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

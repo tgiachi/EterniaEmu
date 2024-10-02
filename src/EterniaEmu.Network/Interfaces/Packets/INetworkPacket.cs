@@ -1,4 +1,4 @@
-namespace EterniaEmu.Network.Interfaces;
+namespace EterniaEmu.Network.Interfaces.Packets;
 
 public interface INetworkPacket
 {

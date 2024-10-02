@@ -1,6 +1,6 @@
 namespace EterniaEmu.Network.Consts;
 
-public enum PacketTypeEnum : byte
+public enum PacketTypeEnum : int
 {
     CharacterCreation = 0x00,
     Logout = 0x01,
