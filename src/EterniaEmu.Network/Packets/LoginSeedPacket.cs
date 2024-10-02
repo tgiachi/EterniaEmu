@@ -8,6 +8,7 @@ namespace EterniaEmu.Network.Packets;
 [NetworkPacket(PacketTypeEnum.LoginSeed)]
 public class LoginSeedPacket : AbstractNetworkPacket
 {
+    public override int OpCode => (int)PacketTypeEnum.LoginSeed;
     public override int Size => 21;
 
     public int Seed { get; set; }

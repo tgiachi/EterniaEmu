@@ -10,4 +10,5 @@ public enum PacketTypeEnum : int
     AttackLastAttack = 0x05,
     RequestObjUse = 0x06,
     LoginSeed = 0xEF,
+    LoginComplete = 0x55
 }

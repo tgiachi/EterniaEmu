@@ -9,6 +9,8 @@ namespace EterniaEmu.Network.Packets;
 [NetworkPacket(PacketTypeEnum.CharacterCreation)]
 public class CharacterCreationPacket : AbstractNetworkPacket
 {
+
+    public override int OpCode => (int)PacketTypeEnum.CharacterCreation;
     public int Unused1 { get; set; }
 
     public int Unused2 { get; set; }

@@ -1,3 +1,4 @@
+using EterniaEmu.Network.Interfaces.Packets;
 using NetCoreServer;
 using Serilog;
 
@@ -13,6 +14,31 @@ public class EterniaTcpSession : TcpSession
     {
     }
 
+    public void SendPackets(params INetworkPacket[] packets)
+    {
+        foreach (var packet in packets)
+        {
+            SendPacket(packet);
+        }
+    }
+
+    public void SendPacket(INetworkPacket packet)
+    {
+        var buffer = new byte[packet.Size + 1];
+
+        if (packet.OpCode == -1)
+        {
+            _logger.Warning("[{Id}] OpCode is not set for packet: {PacketType}", Id, packet.GetType().Name);
+            return;
+        }
+
+        buffer[0] = (byte)packet.OpCode;
+
+
+        packet.Write().CopyTo(buffer, 1);
+
+        SendAsync(buffer);
+    }
 
     protected override void OnReceived(byte[] buffer, long offset, long size)
     {
