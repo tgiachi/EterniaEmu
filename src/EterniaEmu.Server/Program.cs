@@ -13,9 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
-
-
-
+using Serilog.Sinks.SystemConsole.Themes;
 
 
 EterniaServerOptions options = null;
@@ -25,7 +23,8 @@ Parser.Default.ParseArguments<EterniaServerOptions>(args).WithParsed(o => option
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
-    .WriteTo.Console()
+    .Enrich.FromLogContext()
+    .WriteTo.Console(theme: AnsiConsoleTheme.Sixteen)
     .CreateLogger();
 
 var builder = Host.CreateApplicationBuilder(args);
@@ -46,12 +45,14 @@ builder.Configuration
 
 Log.Logger.Debug("Scanning for network packets");
 
-AssemblyUtils.GetAttribute<NetworkPacketAttribute>().ForEach(
-    n =>
-    {
-        Log.Logger.Debug("Registering network packet {Packet}", n.Name);
-        builder.Services.RegisterNetworkPacket(n);
-    });
+AssemblyUtils.GetAttribute<NetworkPacketAttribute>()
+    .ForEach(
+        n =>
+        {
+            Log.Logger.Debug("Registering network packet {Packet}", n.Name);
+            builder.Services.RegisterNetworkPacket(n);
+        }
+    );
 
 
 builder.Services.AddSingleton<IEterniaEmuTcpServer, EterniaEmuTcpServer>();
