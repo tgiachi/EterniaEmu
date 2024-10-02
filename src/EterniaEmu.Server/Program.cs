@@ -20,6 +20,8 @@ EterniaServerOptions options = null;
 
 Parser.Default.ParseArguments<EterniaServerOptions>(args).WithParsed(o => options = o);
 
+var builder = Host.CreateApplicationBuilder(args);
+
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
@@ -27,7 +29,6 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console(theme: AnsiConsoleTheme.Sixteen)
     .CreateLogger();
 
-var builder = Host.CreateApplicationBuilder(args);
 
 builder.Logging
     .ClearProviders()
@@ -38,7 +39,7 @@ builder.RegisterConfig<ServerConfig>("Server");
 
 
 builder.Configuration
-    .AddJsonFile(options.ConfigFile, optional: true)
+    .AddJsonFile(options.ConfigFile)
     .AddEnvironmentVariables()
     .EnableSubstitutions();
 
@@ -63,6 +64,6 @@ var app = builder.Build();
 
 await using var scope = app.Services.CreateAsyncScope();
 
-scope.ServiceProvider.GetRequiredService<IEterniaEmuTcpServer>();
-
+var server = scope.ServiceProvider.GetRequiredService<IEterniaEmuTcpServer>();
+server.Start();
 await app.RunAsync();
