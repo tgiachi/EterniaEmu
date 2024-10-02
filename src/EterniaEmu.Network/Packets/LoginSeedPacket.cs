@@ -1,6 +1,7 @@
 using EterniaEmu.Network.Attributes;
 using EterniaEmu.Network.Consts;
 using EterniaEmu.Network.Implementation.Packets;
+using EterniaEmu.Network.Utils;
 
 namespace EterniaEmu.Network.Packets;
 
@@ -21,13 +22,13 @@ public class LoginSeedPacket : AbstractNetworkPacket
 
     public int Prototype { get; set; }
 
-    public override void Read(Span<byte> buffer)
+
+    protected override void OnDecode(PacketReader reader)
     {
-        Cmd = ReadByte(buffer);
-        Seed = ReadDword(buffer);
-        MajorVersion = ReadDword(buffer);
-        MinorVersion = ReadDword(buffer);
-        Revision = ReadDword(buffer);
-        Prototype = ReadDword(buffer);
+        Seed = reader.ReadInt32();
+        MajorVersion = reader.ReadInt32();
+        MinorVersion = reader.ReadInt32();
+        Revision = reader.ReadInt32();
+        Prototype = reader.ReadInt32();
     }
 }

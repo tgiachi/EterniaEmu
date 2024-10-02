@@ -1,6 +1,6 @@
 using NetCoreServer;
 using Serilog;
-using Serilog.Core;
+
 
 namespace EterniaEmu.Network.Implementation.Server;
 
@@ -13,26 +13,25 @@ public class EterniaTcpSession : TcpSession
     {
     }
 
+
     protected override void OnReceived(byte[] buffer, long offset, long size)
     {
         var opCode = buffer[0];
 
-        _logger.Information("Received opCode: 0x{OpCode} from sessionId: {}", opCode.ToString("X2"), Id);
+        _logger.Information("[{Id}] Received opCode: 0x{OpCode}", Id, opCode.ToString("X2"));
 
         var packet = EterniaTcpServer.CreatePacket(opCode);
 
         if (packet == null)
         {
-            _logger.Warning("Unknown packet type: {OpCode}", opCode);
+            _logger.Warning("[{Id}] Unknown packet type: {OpCode}", Id, opCode);
             return;
         }
 
 
-        _logger.Information("Found packet type: {PacketType}", packet.GetType().Name);
+        _logger.Information("[{Id}] Found packet type: {PacketType}", Id, packet.GetType().Name);
 
         packet.Read(buffer.Skip(1).Take(packet.Size).ToArray());
-
-
 
 
         base.OnReceived(buffer, offset, size);

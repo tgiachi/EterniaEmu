@@ -1,5 +1,6 @@
 using System.Text;
 using EterniaEmu.Network.Interfaces.Packets;
+using EterniaEmu.Network.Utils;
 
 namespace EterniaEmu.Network.Implementation.Packets;
 
@@ -7,45 +8,18 @@ public class AbstractNetworkPacket : INetworkPacket
 {
     public virtual int Size { get; } = 0;
 
-    private int _position = 0;
-
     public virtual void Read(Span<byte> buffer)
     {
+        var reader = new PacketReader(buffer.ToArray(), buffer.Length, true);
+        OnDecode(reader);
+
+        reader = null;
     }
 
     public virtual byte[] Write() => [];
 
 
-    protected void ReadVoid(Span<byte> buffer, int size)
+    protected virtual void OnDecode(PacketReader reader)
     {
-        _position += size;
-    }
-
-    protected byte ReadByte(Span<byte> buffer)
-    {
-        var value = buffer[_position];
-        _position += sizeof(byte);
-        return value;
-    }
-
-    protected int ReadWord(Span<byte> buffer)
-    {
-        var value = BitConverter.ToInt16(buffer.Slice(_position, sizeof(short)));
-        _position += sizeof(short);
-        return value;
-    }
-
-    protected string ReadString(Span<byte> buffer, int size)
-    {
-        var value = Encoding.ASCII.GetString(buffer.Slice(_position, size).ToArray());
-        _position += size;
-        return value;
-    }
-
-    protected int ReadDword(Span<byte> buffer)
-    {
-        var value = BitConverter.ToInt32(buffer.Slice(_position, sizeof(int)));
-        _position += sizeof(int);
-        return value;
     }
 }
