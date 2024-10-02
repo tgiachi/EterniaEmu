@@ -4,4 +4,20 @@ version: '3'
 tasks:
   default:
     cmds:
-      - echo "Hello, World!"
+      - echo "Building the project"
+    deps:
+      [ clean, restore, build, publish ]
+
+  clean:
+    cmds:
+      - rm -rf ./publish
+      - dotnet clean
+  restore:
+    cmds:
+      - dotnet restore
+  build:
+    cmds:
+      - dotnet build
+  publish:
+    cmds:
+      - dotnet publish src/EterniaEmu.Server/EterniaEmu.Server.csproj  -c Release -o ./publish

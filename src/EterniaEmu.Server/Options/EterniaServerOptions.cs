@@ -9,4 +9,7 @@ public class EterniaServerOptions
 
     [Option('c', "config", Required = false, Default = "config.json", HelpText = "Path to the configuration file")]
     public string ConfigFile { get; set; }
+
+    [Option('u', "ultima", Required = false, Default = ".", HelpText = "Path to the Ultima Online client")]
+    public string UltimaPath { get; set; }
 }

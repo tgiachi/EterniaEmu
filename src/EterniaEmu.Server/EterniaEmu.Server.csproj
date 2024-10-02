@@ -7,6 +7,9 @@
         <Nullable>enable</Nullable>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <Version>0.0.1</Version>
+        <PublishSingleFile>true</PublishSingleFile>
+        <SelfContained>true</SelfContained>
+      
     </PropertyGroup>
 
     <ItemGroup>
