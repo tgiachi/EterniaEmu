@@ -10,8 +10,6 @@ public class LoginSeedPacket : AbstractNetworkPacket
 {
     public override int Size => 21;
 
-    public byte Cmd { get; set; }
-
     public int Seed { get; set; }
 
     public int MajorVersion { get; set; }
