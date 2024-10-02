@@ -1,10 +1,13 @@
 ﻿using CommandLine;
+using ConfigurationSubstitution;
 using EterniaEmu.Core.Config.Sections;
 using EterniaEmu.Core.Extensions;
 using EterniaEmu.Server.Options;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 
@@ -30,22 +33,8 @@ builder.RegisterConfig<ServerConfig>("Server");
 
 builder.Configuration
     .AddJsonFile(options.ConfigFile, optional: true)
-    .AddJsonFile($"config.{builder.Environment.EnvironmentName}.json", optional: true)
-    .AddEnvironmentVariables();
-
-
-// var server = new EterniaTcpServer(System.Net.IPAddress.Any, 2593);
-//
-//
-// server.AddPacketType(PacketTypeEnum.LoginSeed, typeof(LoginSeedPacket));
-//
-// server.Start();
-//
-//
-// while (true)
-// {
-//     Thread.Sleep(1000);
-// }
+    .AddEnvironmentVariables()
+    .EnableSubstitutions();
 
 
 var app = builder.Build();
