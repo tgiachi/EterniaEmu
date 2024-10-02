@@ -1,6 +1,7 @@
 using EterniaEmu.Network.Attributes;
 using EterniaEmu.Network.Consts;
 using EterniaEmu.Network.Implementation;
+using EterniaEmu.Network.Implementation.Packets;
 using EterniaEmu.Network.Types;
 
 namespace EterniaEmu.Network.Packets;

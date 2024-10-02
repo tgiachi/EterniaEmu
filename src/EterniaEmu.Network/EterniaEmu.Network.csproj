@@ -7,4 +7,12 @@
         <Version>0.0.1</Version>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\EterniaEmu.Core\EterniaEmu.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Serilog" Version="4.0.2" />
+    </ItemGroup>
+
 </Project>

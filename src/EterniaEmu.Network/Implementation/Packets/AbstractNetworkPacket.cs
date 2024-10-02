@@ -1,8 +1,7 @@
 using System.Text;
-using EterniaEmu.Network.Interfaces;
 using EterniaEmu.Network.Interfaces.Packets;
 
-namespace EterniaEmu.Network.Implementation;
+namespace EterniaEmu.Network.Implementation.Packets;
 
 public class AbstractNetworkPacket : INetworkPacket
 {
