@@ -44,7 +44,7 @@ public class EterniaTcpSession : TcpSession
     {
         var opCode = buffer[0];
 
-        _logger.Information("[{Id}] Received opCode: 0x{OpCode}", Id, opCode.ToString("X2"));
+        _logger.Debug("[{Id}] Received opCode: 0x{OpCode}", Id, opCode.ToString("X2"));
 
         var packet = EterniaTcpServer.CreatePacket(opCode);
 
@@ -55,7 +55,7 @@ public class EterniaTcpSession : TcpSession
         }
 
 
-        _logger.Information("[{Id}] Found packet type: {PacketType}", Id, packet.GetType().Name);
+        _logger.Debug("[{Id}] Found packet type: {PacketType}", Id, packet.GetType().Name);
 
         packet.Read(buffer.Skip(1).Take(packet.Size).ToArray());
 
