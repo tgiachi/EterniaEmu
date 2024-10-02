@@ -1,11 +1,11 @@
-﻿FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/runtime:latest AS base
 USER $APP_UID
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:latest AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/EterniaEmu.Server/EterniaEmu.Server.csproj", "src/EterniaEmu.Server/"]
+COPY ["src/", "src/"]
 RUN dotnet restore "src/EterniaEmu.Server/EterniaEmu.Server.csproj"
 COPY . .
 WORKDIR "/src/src/EterniaEmu.Server"

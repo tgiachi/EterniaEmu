@@ -21,3 +21,6 @@ tasks:
   publish:
     cmds:
       - dotnet publish src/EterniaEmu.Server/EterniaEmu.Server.csproj p:PublishSingleFile=true --self-contained true  -c Release -o ./publish
+  docker-build:
+    cmds:
+      - docker buildx build -t eterniaemu .
