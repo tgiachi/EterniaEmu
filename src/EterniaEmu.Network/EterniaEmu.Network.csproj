@@ -8,11 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EterniaEmu.Core\EterniaEmu.Core.csproj" />
+        <ProjectReference Include="..\EterniaEmu.Core\EterniaEmu.Core.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Serilog" Version="4.0.2" />
+        <PackageReference Include="NetCoreServer" Version="8.0.7"/>
+    
     </ItemGroup>
 
 </Project>
