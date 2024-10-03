@@ -64,24 +64,42 @@ public class EterniaTcpSession : TcpSession
 
     protected override void OnReceived(byte[] buffer, long offset, long size)
     {
-        var opCode = buffer[0];
+        long bufferPosition = 0;
 
-        _logger.Debug("[{Id}] << Received opCode: 0x{OpCode}", Id, opCode.ToString("X2"));
-
-        var packet = EterniaTcpServer.CreatePacket(opCode);
-
-        if (packet == null)
+        while (bufferPosition < size)
         {
-            _logger.Warning("[{Id}] !<< Unknown packet type: {OpCode}", Id, opCode);
-            return;
+            var opCode = buffer[bufferPosition];
+
+            _logger.Debug("[{Id}] << Received opCode: 0x{OpCode}", Id, opCode.ToString("X2"));
+
+            var packet = EterniaTcpServer.CreatePacket(opCode);
+
+            if (packet == null)
+            {
+                _logger.Warning("[{Id}] !<< Unknown packet type: 0x{OpCode}", Id, opCode.ToString("X2"));
+                return;
+            }
+
+            int packetSize = packet.Size;
+
+            if (bufferPosition + packetSize > size)
+            {
+                _logger.Warning("[{Id}] !<< Incomplete packet received, waiting for more data...", Id);
+                break;
+            }
+
+            byte[] packetData = buffer.Skip((int)bufferPosition).Take(packetSize).ToArray();
+
+            _logger.Debug("[{Id}] // Found packet type: {PacketType}", Id, packet.GetType().Name);
+
+
+            packet.Read(packetData);
+
+
+            _eterniaEmuTcpServer.DispatchPacketAsync(this, packet);
+
+            bufferPosition += packetSize;
         }
-
-
-        _logger.Debug("[{Id}] // Found packet type: {PacketType}", Id, packet.GetType().Name);
-
-        packet.Read(buffer.Skip(0).Take(packet.Size).ToArray());
-
-        _eterniaEmuTcpServer.DispatchPacketAsync(this, packet);
 
 
         base.OnReceived(buffer, offset, size);

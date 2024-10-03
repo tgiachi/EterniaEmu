@@ -6,7 +6,7 @@ tasks:
     cmds:
       - echo "Building the project"
     deps:
-      [ clean, restore, build, publish ]
+      [clean, restore, build, publish]
 
   clean:
     cmds:
