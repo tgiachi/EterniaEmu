@@ -13,4 +13,6 @@ public enum PacketTypeEnum : int
     LoginComplete = 0x55,
 
     LoginRequest = 0x80,
+    LoginDenied = 0x82,
+    GameServerList = 0xA8,
 }

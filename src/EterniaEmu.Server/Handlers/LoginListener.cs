@@ -3,21 +3,27 @@ using EterniaEmu.Network.Implementation.Listeners;
 using EterniaEmu.Network.Implementation.Server;
 using EterniaEmu.Network.Interfaces.Packets;
 using EterniaEmu.Network.Packets;
+using EterniaEmu.Network.Types;
 
 namespace EterniaEmu.Server.Handlers;
 
-public class LoginListener : AbstractNetworkPacketListener<LoginSeedPacket>
+public class LoginListener : AbstractNetworkPacketListener<LoginRequestPacket>
 {
-    protected override Task<List<INetworkPacket>> OnPacketReceivedAsync(EterniaTcpSession session, LoginSeedPacket packet)
+    protected override async Task<List<INetworkPacket>> OnPacketReceivedAsync(
+        EterniaTcpSession session, LoginRequestPacket packet
+    )
     {
-        session.Seed = packet.Seed;
-
-        session.ClientVersionData = new ClientVersionData(
-            packet.MajorVersion,
-            packet.MinorVersion,
-            packet.Revision,
-            packet.Prototype
+        var gameList = new GameServerListPacket();
+        gameList.Servers.Add(
+            new GameServerEntryData()
+            {
+                ServerName = "EterniaEmu",
+                ServerIP = "127.0.0.1"
+            }
         );
-        return Task.FromResult(new List<INetworkPacket>());
+        return
+        [
+            gameList
+        ];
     }
 }

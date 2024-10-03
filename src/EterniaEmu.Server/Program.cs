@@ -99,7 +99,11 @@ await using var scope = app.Services.CreateAsyncScope();
 
 var server = scope.ServiceProvider.GetRequiredService<IEterniaEmuTcpServer>();
 
-server.AddPacketListener<LoginSeedPacket>(new LoginListener());
+server
+    .AddPacketListener<LoginSeedPacket>(new SeedListener());
+
+server
+    .AddPacketListener<LoginRequestPacket>(new LoginListener());
 
 server.Start();
 await app.RunAsync();

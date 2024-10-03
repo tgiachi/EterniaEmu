@@ -17,10 +17,20 @@ public class AbstractNetworkPacket : INetworkPacket
         reader = null;
     }
 
-    public virtual byte[] Write() => [];
+    public virtual byte[] Write()
+    {
+        var writer = new PacketWriter();
+        OnEncode(writer);
+
+        return writer.ToArray();
+    }
 
 
     protected virtual void OnDecode(PacketReader reader)
+    {
+    }
+
+    protected virtual void OnEncode(PacketWriter writer)
     {
     }
 }

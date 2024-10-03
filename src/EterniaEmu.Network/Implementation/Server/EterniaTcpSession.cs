@@ -37,7 +37,12 @@ public class EterniaTcpSession : TcpSession
 
     public void SendPacket(INetworkPacket packet)
     {
-        var buffer = new byte[packet.Size + 1];
+        var messageBuffer = packet.Write();
+        var buffer = new byte[messageBuffer.Length + 1];
+        buffer[0] = (byte)packet.OpCode;
+
+        messageBuffer.CopyTo(buffer, 1);
+
 
         if (packet.OpCode == -1)
         {
@@ -45,19 +50,15 @@ public class EterniaTcpSession : TcpSession
             return;
         }
 
-        buffer[0] = (byte)packet.OpCode;
-
-
-        packet.Write().CopyTo(buffer, 1);
-
 
         var result = SendAsync(buffer);
 
         _logger.Debug(
-            "[{Id}] >> Sent ({Result}) opCode: 0x{OpCode} total bytes: {Total}",
+            "[{Id}] >> Sent ({Result}) opCode: 0x{OpCode} ({PacketType}) total bytes: {Total}",
             Id,
             result,
             packet.OpCode.ToString("X2"),
+            packet.GetType().Name,
             buffer.Length
         );
     }
