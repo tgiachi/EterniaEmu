@@ -1,3 +1,4 @@
+using EterniaEmu.Network.Implementation.Server;
 using EterniaEmu.Network.Interfaces.Listeners;
 using EterniaEmu.Network.Interfaces.Packets;
 using NetCoreServer;
@@ -8,6 +9,6 @@ public interface IEterniaEmuTcpServer
 {
     void Start();
 
-    Task DispatchPacketAsync(Guid sessionId, INetworkPacket packet);
+    Task DispatchPacketAsync(EterniaTcpSession session, INetworkPacket packet);
     void AddPacketListener<T>(INetworkPacketListener listener) where T : INetworkPacket;
 }

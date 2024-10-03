@@ -1,3 +1,4 @@
+using EterniaEmu.Core.Data;
 using EterniaEmu.Network.Interfaces.Packets;
 using EterniaEmu.Network.Interfaces.Server;
 using NetCoreServer;
@@ -11,6 +12,12 @@ public class EterniaTcpSession : TcpSession
     private readonly ILogger _logger = Log.ForContext<EterniaTcpSession>();
 
     private readonly IEterniaEmuTcpServer _eterniaEmuTcpServer;
+
+
+    public int Seed { get; set; }
+    public bool IsSeeded => Seed != 0;
+
+    public ClientVersionData ClientVersionData { get; set; }
 
     protected EterniaTcpServer EterniaTcpServer => (EterniaTcpServer)Server;
 
@@ -72,9 +79,9 @@ public class EterniaTcpSession : TcpSession
 
         _logger.Debug("[{Id}] // Found packet type: {PacketType}", Id, packet.GetType().Name);
 
-        packet.Read(buffer.Skip(1).Take(packet.Size).ToArray());
+        packet.Read(buffer.Skip(0).Take(packet.Size).ToArray());
 
-        _eterniaEmuTcpServer.DispatchPacketAsync(Id, packet);
+        _eterniaEmuTcpServer.DispatchPacketAsync(this, packet);
 
 
         base.OnReceived(buffer, offset, size);

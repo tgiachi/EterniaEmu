@@ -1,13 +1,23 @@
-using EterniaEmu.Network.Interfaces.Listeners;
+using EterniaEmu.Core.Data;
+using EterniaEmu.Network.Implementation.Listeners;
+using EterniaEmu.Network.Implementation.Server;
 using EterniaEmu.Network.Interfaces.Packets;
 using EterniaEmu.Network.Packets;
 
 namespace EterniaEmu.Server.Handlers;
 
-public class LoginListener : INetworkPacketListener
+public class LoginListener : AbstractNetworkPacketListener<LoginSeedPacket>
 {
-    public async Task<List<INetworkPacket>> OnPacketReceivedAsync(string sessionId, INetworkPacket packet)
+    protected override Task<List<INetworkPacket>> OnPacketReceivedAsync(EterniaTcpSession session, LoginSeedPacket packet)
     {
-        return new List<INetworkPacket>() { new LoginCompletePacket() };
+        session.Seed = packet.Seed;
+
+        session.ClientVersionData = new ClientVersionData(
+            packet.MajorVersion,
+            packet.MinorVersion,
+            packet.Revision,
+            packet.Prototype
+        );
+        return Task.FromResult(new List<INetworkPacket>());
     }
 }

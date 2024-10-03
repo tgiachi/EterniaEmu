@@ -55,19 +55,19 @@ public class EterniaEmuTcpServer : IEterniaEmuTcpServer
     }
 
 
-    public async Task DispatchPacketAsync(Guid sessionId, INetworkPacket packet)
+    public async Task DispatchPacketAsync(EterniaTcpSession session, INetworkPacket packet)
     {
         if (_packetListeners.TryGetValue(packet.GetType(), out var listener))
         {
             _logger.LogDebug("Dispatching packet {PacketType} to listener", packet.GetType().Name);
 
-            var messages = await listener.OnPacketReceivedAsync(sessionId.ToString(), packet);
+            var messages = await listener.OnPacketReceivedAsync(session, packet);
 
             if (messages != null)
             {
                 foreach (var message in messages)
                 {
-                    _eterniaTcpServer.SendPacket(sessionId, message);
+                    _eterniaTcpServer.SendPacket(session.Id, message);
                 }
             }
         }
