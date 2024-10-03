@@ -20,7 +20,7 @@ public class GameServerListPacket : AbstractNetworkPacket
     protected override void OnEncode(PacketWriter writer)
     {
         writer.Write((short)(40 * Servers.Count));
-        writer.Write((byte)0x5D);
+        writer.Write((byte)0xCC);
         writer.Write((short)Servers.Count);
 
         var index = 0;
@@ -28,7 +28,7 @@ public class GameServerListPacket : AbstractNetworkPacket
         {
             writer.Write((short)index);
             writer.WriteAsciiFixed(server.ServerName, 32);
-            writer.Write((byte)0);
+            writer.Write((byte)5);
             writer.Write((byte)0);
 
             var addressIp = IPAddress.Parse(server.ServerIP).GetAddressBytes();

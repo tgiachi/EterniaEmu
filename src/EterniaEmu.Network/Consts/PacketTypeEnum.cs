@@ -15,4 +15,5 @@ public enum PacketTypeEnum : int
     LoginRequest = 0x80,
     LoginDenied = 0x82,
     GameServerList = 0xA8,
+    SelectServer = 0xA0
 }
