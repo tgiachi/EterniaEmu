@@ -25,25 +25,56 @@ Parser.Default.ParseArguments<EterniaServerOptions>(args).WithParsed(o => option
 var builder = Host.CreateApplicationBuilder(args);
 
 
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Debug()
-    .Enrich.FromLogContext()
-    .WriteTo.Console(theme: AnsiConsoleTheme.Sixteen)
-    .CreateLogger();
-
-
 builder.Logging
     .ClearProviders()
     .AddSerilog();
 
 
-builder.RegisterConfig<ServerConfig>("Server");
+builder
+    .RegisterConfig<ServerConfig>("Server")
+    .RegisterConfig<LogConfig>("Log");
 
-
-builder.Configuration
+var config = builder.Configuration
     .AddJsonFile(options.ConfigFile)
     .AddEnvironmentVariables()
-    .EnableSubstitutions();
+    .EnableSubstitutions()
+    .Build();
+
+var logConfig = config.GetSection("Log").Get<LogConfig>() ?? new LogConfig();
+
+
+if (logConfig.LogToFile)
+{
+    var logPath = Path.Join(EnvUtils.GetRootDirectory(), logConfig.LogPath);
+
+    if (!Directory.Exists(logPath))
+    {
+        Directory.CreateDirectory(logPath);
+    }
+}
+
+
+var logConfiguration = new LoggerConfiguration()
+    .Enrich
+    .FromLogContext();
+
+logConfiguration = logConfiguration.MinimumLevel.Is(logConfig.LogLevel.ToSerilogLevel());
+
+if (logConfig.LogToFile)
+{
+    logConfiguration = logConfiguration.WriteTo.File(
+        Path.Join(EnvUtils.GetRootDirectory(), logConfig.LogPath, logConfig.LogFile),
+        rollingInterval: RollingInterval.Day
+    );
+}
+
+if (logConfig.LogToConsole)
+{
+    logConfiguration.WriteTo.Console(theme: AnsiConsoleTheme.Code);
+}
+
+
+Log.Logger = logConfiguration.CreateLogger();
 
 
 Log.Logger.Debug("Scanning for network packets");
